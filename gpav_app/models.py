@@ -4,7 +4,7 @@ from django.db import models
 class Person(models.Model):
     name = models.CharField(max_length=256)
     id = models.CharField(primary_key=True, max_length=256)
-    avatar_url = models.URLField()
+    avatar_url = models.URLField(null=True)
 
     def __str__(self):
         return self.name

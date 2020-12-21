@@ -1,0 +1,3 @@
+{% for post in posts %}
+    <p><a href="{% url 'post' post.id %}">{{ post.content_html }}</a></p>
+{% endfor %}

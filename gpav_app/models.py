@@ -13,8 +13,8 @@ class Person(models.Model):
 class Comment(models.Model):
     author = models.ForeignKey(Person, on_delete=models.CASCADE)
     date_created = models.DateTimeField()
-    date_modified = models.DateTimeField()
-    content_html = models.CharField(max_length=1024)
+    date_modified = models.DateTimeField(null=True)
+    content_html = models.CharField(max_length=16384)
 
     def __str__(self):
         return self.content_html
@@ -23,9 +23,9 @@ class Comment(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='author')
     date_created = models.DateTimeField()
-    date_modified = models.DateTimeField()
-    content_html = models.CharField(max_length=1024)
-    audience_html = models.CharField(max_length=1024)
+    date_modified = models.DateTimeField(null=True)
+    content_html = models.CharField(max_length=16384)
+    audience_html = models.CharField(max_length=16384)
     plus_oners = models.ManyToManyField(Person, related_name='plus_oners')
     resharers = models.ManyToManyField(Person, related_name='resharers')
     comments = models.ManyToManyField(Comment)

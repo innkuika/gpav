@@ -1,9 +1,21 @@
-from django.core.management.base import BaseCommand
-from gpav_app.models import Post, Person, Comment
 import os
-from typing import List
+import requests
+from django.core.management.base import BaseCommand
+from gpav_app.models import Post, Person, Comment, Poll, PollChoice
+from typing import List, Optional
 from bs4 import BeautifulSoup
 from dateutil import parser
+from urllib.parse import unquote
+
+
+def create_person_if_absent(person_id, name) -> Person:
+    try:
+        person = Person.objects.get(id=person_id)
+    except Person.DoesNotExist:
+        person = Person(id=person_id, name=name)
+        person.save()
+
+    return person
 
 
 def import_post_author(soup) -> Person:
@@ -28,11 +40,8 @@ def import_comments(soup) -> List[Comment]:
         # parse comment author
         author_link = comment_div.find('a', class_='author')
         author_id = author_link['href'].replace('https://plus.google.com/', '')
-        try:
-            author = Person.objects.get(id=author_id)
-        except Person.DoesNotExist:
-            author = Person(id=author_id, name=author_link.span.text)
-            author.save()
+        author_name = author_link.span.text
+        author = create_person_if_absent(author_id, author_name)
 
         # parse comment date created
         date_created = parser.parse(comment_div.find('span', itemprop='dateCreated').text)
@@ -70,14 +79,63 @@ def import_persons_in_element(soup, class_) -> List[Person]:
     plus_oners = []
     for plus_oner_link in plus_oners_div.find_all('a'):
         plus_oner_id = plus_oner_link['href'].replace('https://plus.google.com/', '')
-        try:
-            plus_oner = Person.objects.get(id=plus_oner_id)
-        except Person.DoesNotExist:
-            plus_oner = Person(id=plus_oner_id, name=plus_oner_link.text)
-            plus_oner.save()
+        plus_oner_name = plus_oner_link.text
+        plus_oner = create_person_if_absent(plus_oner_id, plus_oner_name)
         plus_oners.append(plus_oner)
 
     return plus_oners
+
+
+def import_poll(soup, post_path) -> Optional[Poll]:
+    if not soup.find('div', class_='poll-choice'):
+        return None
+
+    # get all ballots for now
+    all_ballots = []
+    for ballot_link in soup.find('div', class_='poll-choice-votes').find_all('a'):
+        ballot_id = ballot_link['href'].replace('https://plus.google.com/', '')
+        ballot_name = ballot_link.text
+        ballot = create_person_if_absent(ballot_id, ballot_name)
+        all_ballots.append(ballot)
+
+    cur_ballot_ptr = 0
+    choices = []
+    for choice_div in soup.find_all('div', class_='poll-choice'):
+        # parse choice
+        choice_description_div = choice_div.find('div', class_='poll-choice-description')
+        choice = choice_description_div.text
+
+        # parse ballots
+        count = int(choice_description_div.next_sibling.text.split(' ')[0])
+        ballots = all_ballots[cur_ballot_ptr: cur_ballot_ptr + count]
+        cur_ballot_ptr += count
+
+        # get image
+        image_data = None
+        choice_image_div = choice_div.find('div', class_='poll-choice-image')
+        choice_image_img = choice_image_div.find('img')
+        if choice_image_img:
+            image_rel_path_or_url = unquote(choice_image_img['src'])
+            if image_rel_path_or_url.startswith("http"):
+                image_data = requests.get(image_rel_path_or_url).content
+            else:
+                image_path = os.path.normpath(os.path.join(os.path.split(post_path)[0], image_rel_path_or_url))
+                with open(image_path, 'rb') as f:
+                    image_data = f.read()
+
+        choice = PollChoice(choice=choice, choice_image=image_data)
+        choice.save()
+        choice.ballots.set(ballots)
+        choice.save()
+
+        choices.append(choice)
+
+    poll = Poll()
+    poll.save()
+    poll.choices.set(choices)
+    poll.save()
+
+    return poll
 
 
 def import_post(post_path):
@@ -115,9 +173,12 @@ def import_post(post_path):
         # parse comments
         comments = import_comments(soup)
 
+        # parse poll
+        poll = import_poll(soup, post_path)
+
         # create post
         post = Post(author=author, date_created=date_created, date_modified=date_modified, content_html=content_html,
-                    audience_html=audience_html)
+                    audience_html=audience_html, poll=poll)
         post.save()
         post.plus_oners.set(plus_oners)
         post.resharers.set(resharers)

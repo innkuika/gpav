@@ -11,11 +11,11 @@
                              class="rounded-full"/>
                     </div>
 
-                    <div class="space-y-1">
+                    <div class="space-y-1 flex-grow">
 
-                    <div class="flex items-center mb-0.5">
+                    <div class="flex items-center mb-0.5 justify-between">
                         <span class="font-semibold text-indigo-900">{{ post.author.name }}</span>
-                        <span class="text-xs text-purple-900 text-opacity-30"> &nbsp;- {{ post.time_before_gp_closed }}d before G+ closed</span>
+                        <span class="text-xs text-purple-900 text-opacity-30"> {{ post.time_before_gp_closed }}d before G+ closed</span>
                     </div>
 
                         {% if post.text %}
@@ -50,7 +50,7 @@
                                 <br>
                             {% endfor %}
                         {% endif %}
-                        <div class="flex space-x-1">
+                        <div class="flex justify-end space-x-1 pt-2">
                             <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
                                 <div slot="avatar">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

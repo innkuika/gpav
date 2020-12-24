@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 class Person(models.Model):
@@ -74,3 +75,10 @@ class Post(models.Model):
 
     def is_public(self):
         return 'Public' in self.audience_html
+
+    @property
+    def time_before_gp_closed(self):
+        return (datetime.datetime(2019, 4, 2, tzinfo=datetime.timezone.utc) - self.date_created).days
+
+
+

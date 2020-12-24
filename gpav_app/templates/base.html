@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <title>Google+ Archive Viewer</title>
     <style>
@@ -16,7 +16,12 @@
     </style>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+<div class="flex justify-center">
+    <div class="md:w-3/5">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
 </body>
 </html>

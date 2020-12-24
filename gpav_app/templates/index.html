@@ -6,9 +6,9 @@
         <a href="{% url 'post' post.id %}">
             <div class="border-2 border-transparent rounded-lg m-4 p-2 bg-white">
                 <div class="flex space-x-2">
-                    <div class="w-12">
+                    <div class="w-12 flex-none">
                         <img src="{{ post.author.avatar_url }}" alt="avatar of: {{ post.author.name }}"
-                         class="rounded-full inline-block h-12 w-12"/>
+                         class="rounded-full"/>
                     </div>
                     <div class="space-y-1">
                         <p class="font-semibold text-indigo-900">{{ post.author.name }}</p>

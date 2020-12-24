@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from gpav_app.models import Post, Person, Comment, Poll, PollChoice
+from gpav_app.models import Post, Person, Comment, Poll, PollChoice, Link, Media
 
 
 class Command(BaseCommand):
@@ -9,3 +9,5 @@ class Command(BaseCommand):
         Comment.objects.all().delete()
         Poll.objects.all().delete()
         PollChoice.objects.all().delete()
+        Link.objects.all().delete()
+        Media.objects.all().delete()

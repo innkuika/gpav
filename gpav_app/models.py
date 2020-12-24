@@ -4,7 +4,7 @@ from django.db import models
 class Person(models.Model):
     name = models.CharField(max_length=256)
     id = models.CharField(primary_key=True, max_length=256)
-    avatar_url = models.URLField(null=True)
+    avatar_url = models.URLField(null=True, max_length=1024)
 
     def __str__(self):
         return self.name
@@ -36,6 +36,26 @@ class Poll(models.Model):
         return ', '.join(map(str, self.choices.all()))
 
 
+class Link(models.Model):
+    url = models.URLField(max_length=1024)
+    preview_text = models.CharField(max_length=16384, null=True)
+    preview_image_url = models.URLField(null=True, max_length=1024)
+
+    def __str__(self):
+        if self.preview_text:
+            return self.preview_text
+        return self.url
+
+
+class Media(models.Model):
+    class MediaType(models.TextChoices):
+        IMAGE = 'IMAGE'
+        VIDEO = 'VIDEO'
+
+    media_type = models.CharField(max_length=5, choices=MediaType.choices)
+    media_data = models.BinaryField(null=True)
+
+
 class Post(models.Model):
     author = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='author')
     date_created = models.DateTimeField()
@@ -46,6 +66,13 @@ class Post(models.Model):
     resharers = models.ManyToManyField(Person, related_name='resharers')
     comments = models.ManyToManyField(Comment)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, null=True)
+    text = models.CharField(max_length=32768, null=True)
+    link = models.ForeignKey(Link, null=True, on_delete=models.CASCADE)
+    media = models.ManyToManyField(Media)
 
     def __str__(self):
+        if self.text:
+            return self.text
+        if self.link:
+            return str(self.link)
         return self.content_html

@@ -1,5 +1,5 @@
 # gpav
-Parse and browse Google+ archive
+Google+ Archive Viewer
 
 ## Prerequisites
 * Python 3.7+

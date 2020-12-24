@@ -1,5 +1,6 @@
 import os
 import requests
+import urllib3
 from gpav_app.models import Media
 from typing import List, Optional
 from bs4 import BeautifulSoup
@@ -8,7 +9,12 @@ from urllib.parse import unquote
 
 def get_media_data(rel_path_or_url, post_path) -> Optional:
     if rel_path_or_url.startswith("http"):
-        return requests.get(rel_path_or_url).content
+        try:
+            return requests.get(rel_path_or_url).content
+        except requests.exceptions.ConnectionError as e:
+            print(f"Error trying to get media data {rel_path_or_url}")
+            print(str(e))
+            return None
     else:
         media_path = os.path.normpath(os.path.join(os.path.split(post_path)[0], rel_path_or_url))
         if not os.path.exists(media_path):

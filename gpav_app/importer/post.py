@@ -5,6 +5,7 @@ from dateutil import parser
 from .person import create_person_if_absent
 from .poll import import_poll
 from .link import import_link
+from .media import import_media
 
 
 def import_post_author(soup) -> Person:
@@ -129,6 +130,9 @@ def import_post(post_path):
         # parse link
         link = import_link(soup)
 
+        # parse media
+        media = import_media(content_html, post_path)
+
         # create post
         post = Post(author=author, date_created=date_created, date_modified=date_modified, content_html=content_html,
                     audience_html=audience_html, poll=poll, text=text, link=link)
@@ -136,4 +140,5 @@ def import_post(post_path):
         post.plus_oners.set(plus_oners)
         post.resharers.set(resharers)
         post.comments.set(comments)
+        post.media.set(media)
         post.save()

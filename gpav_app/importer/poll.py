@@ -1,9 +1,8 @@
-import os
-import requests
 from gpav_app.models import Poll, PollChoice
 from typing import Optional
 from urllib.parse import unquote
 from .person import create_person_if_absent
+from .media import get_media_data
 
 
 def import_poll(soup, post_path) -> Optional[Poll]:
@@ -35,13 +34,7 @@ def import_poll(soup, post_path) -> Optional[Poll]:
         choice_image_div = choice_div.find('div', class_='poll-choice-image')
         choice_image_img = choice_image_div.find('img')
         if choice_image_img:
-            image_rel_path_or_url = unquote(choice_image_img['src'])
-            if image_rel_path_or_url.startswith("http"):
-                image_data = requests.get(image_rel_path_or_url).content
-            else:
-                image_path = os.path.normpath(os.path.join(os.path.split(post_path)[0], image_rel_path_or_url))
-                with open(image_path, 'rb') as f:
-                    image_data = f.read()
+            image_data = get_media_data(unquote(choice_image_img['src']), post_path)
 
         choice = PollChoice(choice=choice, choice_image=image_data)
         choice.save()

@@ -48,12 +48,7 @@ class Link(models.Model):
 
 
 class Media(models.Model):
-    class MediaType(models.TextChoices):
-        IMAGE = 'IMAGE'
-        VIDEO = 'VIDEO'
-
-    media_type = models.CharField(max_length=5, choices=MediaType.choices)
-    media_data = models.BinaryField(null=True)
+    media_data = models.BinaryField()
 
 
 class Post(models.Model):

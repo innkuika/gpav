@@ -1,29 +1,32 @@
-<img src="{{post.author.avatar_url}}">
-<p>{{post.author.name}}</p>
-<p>{{post.date_created}}</p>
-{% if post.date_modified %}
-    <p>Date modified: {{post.date_modified}}</p>
-{% endif %}
-_________________________________
-<p>{{post.content_html}}</p>
-_________________________________
-<p>shared with: {{post.audience_html}}</p>
-{% if plus_oners %}
-    <p>+1'd by: {{ plus_oners }}</p>
-{% endif %}
-
-{% if resharers %}
-    <p>Reshared by: {{resharers}}</p>
-{% endif %}
-
-{% if comments %}
-    {% for comment in comments %}
-    <img src="{{comment.author.avatar_url}}">
-    <p>{{comment.author.name}}</p>
-    <p>{{comment.date_created}}</p>
-    {% if comment.date_modified %}
-        <p>Date modified: {{comment.date_modified}}</p>
+{% extends 'base.html' %}
+{% block content %}
+    <img src="{{post.author.avatar_url}}">
+    <p>{{post.author.name}}</p>
+    <p>{{post.date_created}}</p>
+    {% if post.date_modified %}
+        <p>Date modified: {{post.date_modified}}</p>
     {% endif %}
-    <p>{{comment.content_html}}</p>
-    {% endfor %}
-{% endif %}
+    _________________________________
+    <p>{{post.content_html}}</p>
+    _________________________________
+    <p>shared with: {{post.audience_html}}</p>
+    {% if plus_oners %}
+        <p>+1'd by: {{ plus_oners }}</p>
+    {% endif %}
+
+    {% if resharers %}
+        <p>Reshared by: {{resharers}}</p>
+    {% endif %}
+
+    {% if comments %}
+        {% for comment in comments %}
+        <img src="{{comment.author.avatar_url}}">
+        <p>{{comment.author.name}}</p>
+        <p>{{comment.date_created}}</p>
+        {% if comment.date_modified %}
+            <p>Date modified: {{comment.date_modified}}</p>
+        {% endif %}
+        
+        {% endfor %}
+    {% endif %}
+{% endblock %}

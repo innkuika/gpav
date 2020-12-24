@@ -1,10 +1,10 @@
-from django.http import HttpResponse
 from .models import Post
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 
 def index(request):
-    posts = get_list_or_404(Post)
+    # TODO; gai hui lai
+    posts = get_list_or_404(Post.objects.order_by('-date_created'))[: 100]
     context = {
         'posts': posts
     }

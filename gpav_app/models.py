@@ -71,3 +71,6 @@ class Post(models.Model):
         if self.link:
             return str(self.link)
         return self.content_html
+
+    def is_public(self):
+        return 'Public' in self.audience_html

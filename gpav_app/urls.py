@@ -4,5 +4,5 @@ from .views import PostListView, post
 
 urlpatterns = [
     path('', PostListView.as_view(), name='index'),
-    path('post/<int:post_id>', post, name='post')
+    path('posts/<str:post_id>', post, name='post')
 ]

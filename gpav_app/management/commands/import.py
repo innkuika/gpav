@@ -4,7 +4,7 @@ from gpav_app.importer.post import import_post
 
 
 class Command(BaseCommand):
-    help = 'Import from google plus takeout archive folder'
+    help = 'Import from Google+ takeout archive folder'
 
     def add_arguments(self, arg_parser):
         arg_parser.add_argument('path', type=str)

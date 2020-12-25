@@ -130,8 +130,8 @@
                     {% endif %}
                 </div>
                 {% endif %}
-                {% if comments %}
-                    {% for comment in comments %}
+                {% if post.comments.all %}
+                    {% for comment in post.comments.all %}
                         <div class="flex items-center border-b">
                             <p class="font-bold text-indigo-900 opacity-80 text-sm">{{ comment.author.name }}</p>
                             <p class="text-xs text-purple-900 text-opacity-30">&nbsp;{{ comment.time_after_posted }}&nbsp;after posted</p>

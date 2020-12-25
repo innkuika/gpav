@@ -104,21 +104,52 @@
             </div>
         </a>
     {% endfor %}
-    <div class="pagination">
-        <span class="step-links">
+    <div class="flex m-6 justify-between items-center text-sm text-indigo-900 text-opacity-80">
+        {% if page_obj.has_previous %}
+        <div class="flex space-x-1">
+        {% else %}
+        <div class="flex space-x-1 invisible">
+        {% endif %}
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page=1">&laquo; first</a>
+                </div>
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                </div>
+            {% else %}
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page=1">&laquo; first</a>
+                </div>
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page=1">previous</a>
+                </div>
             {% endif %}
-
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
+        </div>
+        <span>
+            <span class="font-semibold">{{ page_obj.number }}</span> / {{ page_obj.paginator.num_pages }}
         </span>
+        {% if page_obj.has_next %}
+        <div class="flex space-x-1">
+        {% else %}
+        <div class="flex space-x-1 invisible">
+        {% endif %}
+            {% if page_obj.has_next %}
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                </div>
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                </div>
+            {% else %}
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page={{ page_obj.paginator.num_pages }}">next</a>
+                </div>
+                <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                </div>
+            {% endif %}
+        </div>
+
     </div>
 {% endblock %}

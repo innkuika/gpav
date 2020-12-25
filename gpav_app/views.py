@@ -5,7 +5,7 @@ from django.views.generic.list import ListView
 
 class PostListView(ListView):
     model = Post
-    paginate_by = 50
+    paginate_by = 25
     ordering = '-date_created'
     template_name = 'index.html'
 

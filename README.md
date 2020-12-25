@@ -6,7 +6,7 @@ Google+ Archive Viewer
 * Postgres
 
 ## Configurations
-* `SHOW_PRIVATE_POSTS`: whether to show private (non-Public in Google+) posts
+* `SHOW_PRIVATE_POSTS` - whether to show private (non-Public in Google+) posts
 
 ## Development
 If you are on macOS, make sure you first install Postgres via homebrew

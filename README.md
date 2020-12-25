@@ -5,6 +5,9 @@ Google+ Archive Viewer
 * Python 3.7+
 * Postgres
 
+## Configurations
+* `SHOW_PRIVATE_POSTS`: whether to show private (non-Public in Google+) posts
+
 ## Development
 If you are on macOS, make sure you first install Postgres via homebrew
 

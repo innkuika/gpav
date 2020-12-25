@@ -1,32 +1,157 @@
 {% extends 'base.html' %}
+{% load image_extras %}
 {% block content %}
-    <img src="{{post.author.avatar_url}}">
-    <p>{{post.author.name}}</p>
-    <p>{{post.date_created}}</p>
-    {% if post.date_modified %}
-        <p>Date modified: {{post.date_modified}}</p>
-    {% endif %}
-    _________________________________
-    <p>{{post.content_html}}</p>
-    _________________________________
-    <p>shared with: {{post.audience_html}}</p>
-    {% if plus_oners %}
-        <p>+1'd by: {{ plus_oners }}</p>
-    {% endif %}
+    <div class="border-2 border-transparent rounded-lg m-4 p-2 bg-white">
+        <div class="flex space-x-2">
+            <div class="w-12 flex-none">
+                <img src="{{ post.author.avatar_url }}" alt="avatar of: {{ post.author.name }}"
+                     class="rounded-full"/>
+            </div>
 
-    {% if resharers %}
-        <p>Reshared by: {{resharers}}</p>
-    {% endif %}
+            <div class="space-y-1 flex-grow">
 
-    {% if comments %}
-        {% for comment in comments %}
-        <img src="{{comment.author.avatar_url}}">
-        <p>{{comment.author.name}}</p>
-        <p>{{comment.date_created}}</p>
-        {% if comment.date_modified %}
-            <p>Date modified: {{comment.date_modified}}</p>
-        {% endif %}
-        
-        {% endfor %}
-    {% endif %}
+                <div class="flex items-bottom mb-0.5 justify-between">
+                    <div class="flex items-center">
+                        <span class="font-semibold text-indigo-900">{{ post.author.name }}</span>
+                        {% if post.is_public %}
+                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp; > Public</p>
+                        {% endif %}
+
+                    </div>
+
+                    <span class="text-xs text-purple-900 text-opacity-30"> {{ post.time_before_gp_closed }}d before G+ closed</span>
+                </div>
+
+                {% if post.text %}
+                    <p class="text-indigo-900">{{ post.text }}</p>
+                {% endif %}
+                {% if post.media.all %}
+                    {% for media in post.media.all %}
+                        <img src="data:image;base64,{{ media.media_data | bin_2_img }}"
+                             class="rounded h-44 w-96 object-cover border-2 border-purple-50"/>
+                    {% endfor %}
+                {% endif %}
+                {% if post.link %}
+                    <a href="{{ post.link.url }}" class="hyperlink text-sm space-y-1">
+                        <p class=''>
+                            {% if post.link.preview_text %}
+                                {{ post.link.preview_text }}
+                            {% else %}
+                                {{ post.link.url }}
+                            {% endif %}
+                        </p>
+                        {% if post.link.preview_image_url %}
+                            <img src="{{ post.link.preview_image_url }}"
+                                 class="rounded h-44 w-96 object-cover"/>
+                        {% endif %}
+                    </a>
+                {% endif %}
+                {% if post.poll %}
+                    <p>This is a poll.</p>
+                    <br>
+                    {% for choice in post.poll.choices %}
+                        {{ choice.choice }}
+                        <br>
+                    {% endfor %}
+                {% endif %}
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <p class="text-xs text-purple-900 text-opacity-30">{{ post.formatted_date_created }}</p>
+                        {% if post.is_updated %}
+                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp;
+                                Updated: {{ post.formatted_date_modified }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-end space-x-1 pt-2">
+                        <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                            <div slot="avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-4 w-4">
+                                    <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm max-w-full flex-initial">
+                                {{ post.plus_oners.all.count }}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                            <div slot="avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-4 w-4">
+                                    <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm max-w-full flex-initial">
+                                &nbsp;{{ post.resharers.all.count }}
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center items-center py-1 px-2 rounded-md bg-yellow-500 bg-opacity-30">
+                            <div slot="avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-4 w-4">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm max-w-full flex-initial">
+                                &nbsp;{{ post.comments.all.count }}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="border-t-2 text-xs text-purple-900 text-opacity-60 p-2">
+                    {% if plus_oners %}
+                        <p>+1'd by: {{ plus_oners }}</p>
+                    {% endif %}
+
+                    {% if resharers %}
+                        <p>Reshared by: {{ resharers }}</p>
+                    {% endif %}
+                </div>
+
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="flex items-center">
+                            <p class="font-bold text-indigo-900 opacity-80 text-sm">{{ comment.author.name }}</p>
+                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp;{{ comment.formatted_date_created }}</p>
+                            {% if comment.date_modified %}
+                                <p class="text-xs text-purple-900 text-opacity-45">Updated: {{ comment.date_modified }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="text-indigo-900 opacity-80 text-sm">
+                            {{ comment.content_html|safe }}
+                        </div>
+
+
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+
+
+
 {% endblock %}

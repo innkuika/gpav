@@ -20,6 +20,17 @@ class Comment(models.Model):
     def __str__(self):
         return self.content_html
 
+    @property
+    def formatted_date_modified(self):
+        return self.date_modified.strftime('%m/%d/%Y %H:%M')
+
+    @property
+    def formatted_date_created(self):
+        return self.date_created.strftime('%m/%d/%Y %H:%M')
+
+    def is_updated(self):
+        return not self.date_modified == self.date_created
+
 
 class PollChoice(models.Model):
     choice = models.CharField(max_length=256)
@@ -79,6 +90,15 @@ class Post(models.Model):
     @property
     def time_before_gp_closed(self):
         return (datetime.datetime(2019, 4, 2, tzinfo=datetime.timezone.utc) - self.date_created).days
+
+    def formatted_date_created(self):
+        return self.date_created.strftime('%m/%d/%Y %H:%M')
+
+    def formatted_date_modified(self):
+        return self.date_modified.strftime('%m/%d/%Y %H:%M')
+
+    def is_updated(self):
+        return not self.date_modified == self.date_created
 
 
 

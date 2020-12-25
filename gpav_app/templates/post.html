@@ -12,7 +12,7 @@
 
                 <div class="flex items-bottom mb-0.5 justify-between">
                     <div class="flex items-center">
-                        <span class="font-semibold text-indigo-900">{{ post.author.name }}</span>
+                        <span class="font-semibold text-indigo-900 text-lg">{{ post.author.name }}</span>
                         {% if post.is_public %}
                             <p class="text-xs text-purple-900 text-opacity-30">&nbsp; > Public</p>
                         {% endif %}
@@ -23,7 +23,7 @@
                 </div>
 
                 {% if post.text %}
-                    <p class="text-indigo-900">{{ post.text }}</p>
+                    <p class="text-indigo-900 whitespace-pre-line text-lg">{{ post.text }}</p>
                 {% endif %}
                 {% if post.media.all %}
                     {% for media in post.media.all %}
@@ -58,8 +58,8 @@
                     <div class="flex items-center">
                         <p class="text-xs text-purple-900 text-opacity-30">{{ post.formatted_date_created }}</p>
                         {% if post.is_updated %}
-                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp;
-                                Updated: {{ post.formatted_date_modified }}</p>
+                            <p class="text-xs text-purple-900 text-opacity-30">
+                                &nbsp;-&nbsp;updated&nbsp;{{ post.time_before_updated }} later</p>
                         {% endif %}
                     </div>
                     <div class="flex justify-end space-x-1 pt-2">
@@ -132,11 +132,11 @@
 
                 {% if comments %}
                     {% for comment in comments %}
-                        <div class="flex items-center">
+                        <div class="flex items-center border-b">
                             <p class="font-bold text-indigo-900 opacity-80 text-sm">{{ comment.author.name }}</p>
-                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp;{{ comment.formatted_date_created }}</p>
+                            <p class="text-xs text-purple-900 text-opacity-30">&nbsp;{{ comment.time_after_posted }}&nbsp;after posted</p>
                             {% if comment.date_modified %}
-                                <p class="text-xs text-purple-900 text-opacity-45">Updated: {{ comment.date_modified }}</p>
+                                <p class="text-xs text-purple-900 text-opacity-25"> &nbsp;-&nbsp;updated&nbsp;{{ comment.time_before_updated }} later</p>
                             {% endif %}
                         </div>
                         <div class="text-indigo-900 opacity-80 text-sm">
@@ -148,6 +148,9 @@
                 {% endif %}
 
             </div>
+
+        <div class="w-6 flex-none">
+        </div>
         </div>
     </div>
 

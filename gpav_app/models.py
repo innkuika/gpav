@@ -2,6 +2,21 @@ from django.db import models
 import datetime
 
 
+def time_in_between(delta):
+    delta_in_seconds = delta.seconds
+    delta_in_hours = divmod(delta_in_seconds, 3600)[0]
+    delta_in_mins = divmod(delta_in_seconds, 60)[0]
+
+    if delta.days > 0:
+        return f'{delta.days}d'
+    elif delta_in_hours > 0:
+        return f'{delta_in_hours}h'
+    elif delta_in_mins > 0:
+        return f'{delta_in_mins}m'
+    else:
+        return f'{delta_in_seconds}s'
+
+
 class Person(models.Model):
     name = models.CharField(max_length=256)
     id = models.CharField(primary_key=True, max_length=256)
@@ -28,8 +43,17 @@ class Comment(models.Model):
     def formatted_date_created(self):
         return self.date_created.strftime('%m/%d/%Y %H:%M')
 
+    @property
     def is_updated(self):
         return not self.date_modified == self.date_created
+
+    @property
+    def time_after_posted(self):
+        return time_in_between(self.date_created - self.post_set.first().date_created)
+
+    @property
+    def time_before_updated(self):
+        return time_in_between(self.date_modified - self.date_created)
 
 
 class PollChoice(models.Model):
@@ -99,6 +123,10 @@ class Post(models.Model):
 
     def is_updated(self):
         return not self.date_modified == self.date_created
+
+    def time_before_updated(self):
+        return time_in_between(self.date_modified - self.date_created)
+
 
 
 

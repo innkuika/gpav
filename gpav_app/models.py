@@ -110,7 +110,7 @@ class Post(models.Model):
         return self.content_html
 
     def is_public(self):
-        return 'Public' in self.audience_html
+        return 'Public' in self.audience_html or '公開'
 
     @property
     def time_before_gp_closed(self):

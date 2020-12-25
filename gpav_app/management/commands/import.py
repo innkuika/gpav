@@ -11,6 +11,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         posts_path = os.path.join(options['path'], 'Google+ Stream', 'Posts')
+        if not os.path.exists(posts_path):
+            posts_path = os.path.join(options['path'], 'Google+ 訊息串', '訊息')
         for filename in os.listdir(posts_path):
             if filename.endswith('.html'):
                 import_post(os.path.join(posts_path, filename))

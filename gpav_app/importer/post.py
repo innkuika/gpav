@@ -133,9 +133,12 @@ def import_post(post_path):
         # parse media
         media = import_media(content_html, post_path)
 
+        # parse post id
+        post_id = soup.body['itemid'].replace(f'https://plus.google.com/{author.id}/posts/', '')
+
         # create post
         post = Post(author=author, date_created=date_created, date_modified=date_modified, content_html=content_html,
-                    audience_html=audience_html, poll=poll, text=text, link=link)
+                    audience_html=audience_html, poll=poll, text=text, link=link, id=post_id)
         post.save()
         post.plus_oners.set(plus_oners)
         post.resharers.set(resharers)

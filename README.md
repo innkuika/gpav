@@ -5,6 +5,12 @@ Google+ Archive Viewer
 * Python 3.7+
 * Postgres
 
+## Configurations
+* `DATABASE_URL` - Mandatory Postgres URL. For development, it should be `postgres://admin:password@localhost:5432/gpav`
+* `SECRET_KEY` - Mandatory [Django secret key](https://docs.djangoproject.com/en/3.1/ref/settings/#secret-key)
+* `DEBUG` - Optional [Django debug](https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-DEBUG). By default `false`
+* `SHOW_PRIVATE_POSTS` - Optional. Whether to show private (non-Public in Google+) posts. By default `false`
+
 ## Development
 If you are on macOS, make sure you first install Postgres via homebrew
 
@@ -31,7 +37,12 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-4. Run server
+4. Copy a development environment file
+```
+cp .example.env .env
+```
+
+5. Run server
 ```
 python manage.py runserver
 ```

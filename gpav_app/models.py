@@ -65,6 +65,7 @@ class Post(models.Model):
     text = models.CharField(max_length=32768, null=True)
     link = models.ForeignKey(Link, null=True, on_delete=models.CASCADE)
     media = models.ManyToManyField(Media)
+    id = models.CharField(max_length=256, primary_key=True)
 
     def __str__(self):
         if self.text:

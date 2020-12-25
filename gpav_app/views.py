@@ -1,14 +1,13 @@
 from .models import Post
 from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.views.generic.list import ListView
 
 
-def index(request):
-    # TODO; gai hui lai
-    posts = get_list_or_404(Post.objects.order_by('-date_created'))[: 100]
-    context = {
-        'posts': posts
-    }
-    return render(request, 'index.html', context)
+class PostListView(ListView):
+    model = Post
+    paginate_by = 50
+    ordering = '-date_created'
+    template_name = 'index.html'
 
 
 def post(request, post_id):

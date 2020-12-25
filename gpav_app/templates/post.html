@@ -18,8 +18,8 @@
         <p>Reshared by: {{resharers}}</p>
     {% endif %}
 
-    {% if comments %}
-        {% for comment in comments %}
+    {% if post.comments.all %}
+        {% for comment in post.comments.all %}
         <img src="{{comment.author.avatar_url}}">
         <p>{{comment.author.name}}</p>
         <p>{{comment.date_created}}</p>

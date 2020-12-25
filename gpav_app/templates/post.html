@@ -49,7 +49,7 @@
                 {% if post.poll %}
                     <p>This is a poll.</p>
                     <br>
-                    {% for choice in post.poll.choices %}
+                    {% for choice in post.poll.choices.all %}
                         {{ choice.choice }}
                         <br>
                     {% endfor %}

@@ -27,7 +27,7 @@
                 {% endif %}
                 {% if post.media.all %}
                     {% for media in post.media.all %}
-                        <img src="data:image;base64,{{ media.media_data | bin_2_img }}"
+                        <img src="{% url 'media' media.id %}"
                              class="rounded h-3/12 w-9/12 object-cover border-2 border-purple-50"/>
                     {% endfor %}
                 {% endif %}

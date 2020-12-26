@@ -1,7 +1,7 @@
-from .models import Post
+from .models import Post, Media
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.list import ListView
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .settings import SHOW_PRIVATE_POSTS
 from django.db.models import Q
 
@@ -25,3 +25,8 @@ def post(request, post_id):
         'resharers': ', '.join(map(lambda pp: pp.name, p.resharers.all()))
     }
     return render(request, 'post.html', context)
+
+
+def media(request, media_id):
+    m = get_object_or_404(Media, id=media_id).media_data
+    return HttpResponse(m)

@@ -7,12 +7,21 @@ from django.db.models import Q
 
 
 class PostListView(ListView):
-    # TODO: audience_html__contains='Public' duplicates with is_public
-    queryset = Post.objects.all() if SHOW_PRIVATE_POSTS else Post.objects.filter(
-        Q(audience_html__contains='Public') | Q(audience_html__contains='公開'))
     paginate_by = 25
-    ordering = '-date_created'
     template_name = 'index.html'
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        posts = Post.objects.all()
+
+        if not SHOW_PRIVATE_POSTS:
+            # TODO: audience_html__contains='Public' duplicates with is_public
+            posts = posts.filter(Q(audience_html__contains='Public') | Q(audience_html__contains='公開'))
+
+        if q != '':
+            posts = posts.filter(Q(text__contains=q) | Q(plus_oners__name__contains=q) | Q(resharers__name__contains=q)
+                                 | Q(comments__content_html__contains=q) | Q(comments__author__name__contains=q))
+        return posts.order_by('-date_created').distinct()
 
 
 def post(request, post_id):

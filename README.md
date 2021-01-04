@@ -3,6 +3,7 @@ Google+ Archive Viewer
 
 ## Prerequisites
 * Python 3.7+
+  * **If you use macOS, make sure you use the Homebrew version of Python 3**
 * Postgres
 
 ## Configurations
@@ -12,14 +13,13 @@ Google+ Archive Viewer
 * `SHOW_PRIVATE_POSTS` - Optional. Whether to show private (non-Public in Google+) posts. By default `false`
 
 ## Development
-If you are on macOS, make sure you first install Postgres via homebrew
-
+1. Initialize virtualenv and install dependencies
 ```
 python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt
 ```
 
-1. Create the required Postgres database
+2. Create the required Postgres database
 ```
 createdb gpav
 psql gpav
@@ -27,22 +27,17 @@ psql gpav
 # grant all privileges on database gpav to admin;
 ```
 
-2. Perform the first migration
-```
-python manage.py migrate
-```
-
-3. Create an admin user for Django admin
-```
-python manage.py createsuperuser
-```
-
-4. Copy a development environment file
+3. Copy a development environment file
 ```
 cp .example.env .env
 ```
 
-5. Run server
+4. Perform the first migration
 ```
-python manage.py runserver
+python manage.py migrate
+```
+
+5. Create an admin user for Django admin
+```
+python manage.py createsuperuser
 ```

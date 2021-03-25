@@ -41,3 +41,14 @@ python manage.py migrate
 ```
 python manage.py createsuperuser
 ```
+
+## Develepment after setup
+1. Enter virtualenv
+```
+source venv/bin/activate
+```
+
+2. Run server
+```
+python manage.py runserver 
+```

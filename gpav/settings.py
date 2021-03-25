@@ -28,7 +28,6 @@ DEBUG = os.environ.get('DEBUG', 'false') == 'true'
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [

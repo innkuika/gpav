@@ -37,5 +37,5 @@ def post(request, post_id):
 
 
 def media(request, media_id):
-    m = get_object_or_404(Media, id=media_id).media_data
+    m = get_object_or_404(Media, id=media_id).media_file
     return HttpResponse(m)

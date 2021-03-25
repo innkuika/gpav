@@ -59,7 +59,7 @@ class Comment(models.Model):
 class PollChoice(models.Model):
     choice = models.CharField(max_length=256)
     ballots = models.ManyToManyField(Person)
-    choice_image = models.BinaryField(null=True)
+    choice_image_file = models.FileField(null=True)
 
     def __str__(self):
         return self.choice
@@ -84,7 +84,7 @@ class Link(models.Model):
 
 
 class Media(models.Model):
-    media_data = models.BinaryField()
+    media_file = models.FileField(null=True)
 
 
 class Post(models.Model):

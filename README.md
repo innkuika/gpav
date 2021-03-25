@@ -52,3 +52,49 @@ source venv/bin/activate
 ```
 python manage.py runserver 
 ```
+
+## S3 migration
+1. Setup S3 bucket
+ * Create bucket
+ * Create IAM user and grant permission, use policy:
+    ```
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObjectAcl",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:DeleteObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::gpav/*",
+                "arn:aws:s3:::gpav"
+            ]
+        }
+    ]
+    }
+   ```
+  
+3. Fill in env vars in `example.env`
+4. Delete all data in database
+```
+python manage.py delete_all  
+```
+
+5. Perform migration
+```
+python manage.py migrate
+```
+
+6. Import data
+```
+python manage.py import <path/to/archive/directory>
+```
+
+

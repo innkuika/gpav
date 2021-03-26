@@ -1,3 +1,5 @@
+from django.core.files.base import ContentFile
+
 from gpav_app.models import Poll, PollChoice
 from typing import Optional
 from urllib.parse import unquote
@@ -36,7 +38,9 @@ def import_poll(soup, post_path) -> Optional[Poll]:
         if choice_image_img:
             image_data = get_media_data(unquote(choice_image_img['src']), post_path)
 
-        choice = PollChoice(choice=choice, choice_image=image_data)
+        choice = PollChoice(choice=choice)
+        if image_data:
+            choice.choice_image_file.save(image_data[0], ContentFile(image_data[1]))
         choice.save()
         choice.ballots.set(ballots)
         choice.save()

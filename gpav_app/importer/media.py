@@ -1,8 +1,7 @@
 import os
 import requests
 from django.core.files.base import ContentFile
-import uuid
-
+import hashlib
 from gpav_app.models import Media
 from typing import List, Optional
 from bs4 import BeautifulSoup
@@ -13,7 +12,7 @@ from typing import Tuple
 def get_media_data(rel_path_or_url, post_path) -> Optional[Tuple[str, bytes]]:
     if rel_path_or_url.startswith("http"):
         try:
-            return str(uuid.uuid4()), requests.get(rel_path_or_url).content
+            return str(hashlib.md5(rel_path_or_url.encode("utf-8")).hexdigest()), requests.get(rel_path_or_url).content
         except requests.exceptions.ConnectionError as e:
             print(f"Error trying to get media data {rel_path_or_url}")
             print(str(e))
@@ -24,7 +23,7 @@ def get_media_data(rel_path_or_url, post_path) -> Optional[Tuple[str, bytes]]:
             print(f"Local media does not exist {media_path}")
             return None
         with open(media_path, 'rb') as f:
-            return media_path, f.read()
+            return str(hashlib.md5(media_path.encode("utf-8")).hexdigest()), f.read()
 
 
 def import_media(content_html, post_path) -> List[Media]:

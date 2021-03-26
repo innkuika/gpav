@@ -53,7 +53,7 @@ source venv/bin/activate
 python manage.py runserver 
 ```
 
-## S3 migration
+## S3 migration for local development
 1. Setup S3 bucket
  * Create bucket, don't block public access, use policy:
   ```
@@ -68,13 +68,13 @@ python manage.py runserver
                 "s3:GetObject",
                 "s3:GetObjectVersion"
             ],
-            "Resource": "arn:aws:s3:::gpav/*"
+            "Resource": "arn:aws:s3:::<bucket name>/*"
         }
     ]
-}
+  }
   ```
  
- * Create IAM user and grant permission, use policy:
+ * Create IAM user and grant permission, enable `Programmatic Access`, use policy:
     ```
     {
     "Version": "2012-10-17",
@@ -91,28 +91,34 @@ python manage.py runserver
                 "s3:PutObjectAcl"
             ],
             "Resource": [
-                "arn:aws:s3:::gpav/*",
-                "arn:aws:s3:::gpav"
+                "arn:aws:s3:::<bucket name>/*",
+                "arn:aws:s3:::<bucket name>"
             ]
         }
     ]
     }
    ```
   
-3. Fill in env vars in `example.env`
-4. Delete all data in database
+2. Fill in env vars in `example.env`
+3. Delete all data in database
 ```
 python manage.py delete_all  
 ```
 
-5. Perform migration
+4. Perform migration
 ```
 python manage.py migrate
 ```
 
-6. Import data
+5. Import data
 ```
 python manage.py import <path/to/archive/directory>
 ```
 
-
+## S3 migration for production 
+1. Setup s3 bucket (same as step 1 above)
+2. Add following config var to heroku:
+ * `AWS_STORAGE_BUCKET_NAME`
+ * `AWS_SECRET_ACCESS_KEY`
+ * `AWS_S3_REGION_NAME`
+ * `AWS_ACCESS_KEY_ID`

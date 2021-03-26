@@ -34,8 +34,3 @@ def post(request, post_id):
         'resharers': ', '.join(map(lambda pp: pp.name, p.resharers.all()))
     }
     return render(request, 'post.html', context)
-
-
-def media(request, media_id):
-    m = get_object_or_404(Media, id=media_id).media_file
-    return HttpResponse(m)

@@ -6,7 +6,7 @@ FROM python:3.9-slim-buster AS builder
 
 # makes sure system is up-to-date
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends build-essential libpq-dev python-dev
+RUN apt-get install -y --no-install-recommends build-essential python-dev
 
 # use regular user
 RUN useradd --create-home app

@@ -43,4 +43,4 @@ ENV PATH="./venv/bin:$PATH"
 ENV PYTHONFAULTHANDLER=1
 ENV PORT=5000
 EXPOSE 5000
-ENTRYPOINT ["gunicorn", "gpav.wsgi", "--log-file", "-"]
+ENTRYPOINT python manage.py migrate && gunicorn gpav.wsgi --log-file -
